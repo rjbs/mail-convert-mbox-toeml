@@ -250,79 +250,90 @@ sub GetCurrentTime {
 
 1;
 __END__
-# Below is stub documentation for your module. You better edit it!
-
 =head1 NAME
 
-Mail::Convert::Mbox::ToEml - Perl extension to convert Mbox files (from Mozilla and Co) to Outlook Express eml files.
+Mail::Convert::Mbox::ToEml - convert mbox files to Outlook Express .eml files
 
 =head1 SYNOPSIS
 
   use Mail::Convert::Mbox::ToEml;
-  my $EML=Mail::Convert::Mbox::ToEml->new($file, $outdir);
-  my $ret=$EML->CreateEML();
+
+  my $EML = Mail::Convert::Mbox::ToEml->new($file, $outdir);
+
+  die "failed to make EML file" unless" $EML->CreateEML();
 
 =head1 DESCRIPTION
 
-Mail::Convert::Mbox::ToEml is a module to convert Mbox mail folder which used by Mozilla and co.
-to single Outlook Express .eml files.
+Mail::Convert::Mbox::ToEml is a module to convert Mbox mail folder which used
+by many unix-born software to single Outlook Express .eml files.
 
 =head1 FUNCTIONS
 
-=over 4
-
-=item new()
+=head2 new
 
 The constructor. 
-$EML=Mail::Convert::Mbox::ToEml->new($file, $outdir);
-The two arguments are:
-$file is the MBox file to convert.
-$outdir is the directory where the single eml files are stored.
+
+  $EML = Mail::Convert::Mbox::ToEml->new($file, $outdir);
+
+C<$file> is the MBox file to convert.
+
+C<$outdir> is the directory where the single eml files are stored.
 
 On error the method returns undef.
 
-=item CreateEML()
+=head2 CreateEML
 
 This function do the convertion and writes the .eml file.
+
 The two optional arguments are:
-$file is the MBox file to convert.
-$outdir is the directory where the single eml files have to be stored.
 
-The return value is undef if the file or the ouput directory does not exist and 1 on success.
-If there was an error to create the eml file it will be printed out and continuewith the next message.
+C<$file> is the MBox file to convert.
 
+C<$outdir> is the directory where the single eml files have to be stored.
 
-=item GetMessages()
+The return value is undef if the file or the ouput directory does not exist and
+1 on success.  If there was an error to create the eml file it will be printed
+out and creation will continue with the next message.
+
+=head2 GetMessages
 
 This method returns the subject line of all messages in the file.
+
 Paramter: the file to process (optional)
+
 Return: an Array of subjects or undef.
 
-=item FindMessage()
+=head2 FindMessage
 
-This method return the found messages which match the keyword in the subject line given as parameter.
+This method return the found messages which match the keyword in the subject
+line given as parameter.
+
 Parameters: a keyword and optional a file to process
-Return: a hash of hashes whith the subject line and the message number or undef.
+
+Return: a hash of hashes whith the subject line and the message number or
+undef.
 
 example: 
-my %h = $MBX->FindMessage("RE: Help", ["d:/mail/Inbox"]);
-foreach (keys %h)
-{
-	print "The key: $_="; 
-		foreach my $xx (keys %{$h{$_}})  
-		{
-			print "$xx=" . %{$h{$_}}->{$xx} . " ";
-		}
-	print " \n";
-}
+
+  my %h = $MBX->FindMessage("RE: Help", ["d:/mail/Inbox"]);
+  foreach (keys %h)
+  {
+    print "The key: $_="; 
+      foreach my $xx (keys %{$h{$_}})  
+      {
+        print "$xx=" . %{$h{$_}}->{$xx} . " ";
+      }
+    print " \n";
+  }
 
 
-=item GetMessageCount()
+=head2 GetMessageCount
 
 This method returns the number of messages in the given file or undef.
+
 There are no parameters.
 
-=item SetFileAndDir()
+=head2 SetFileAndDir
 
 With this Method the input file and the output directory can be set.
 Parameters: filename, output directory
@@ -332,16 +343,20 @@ Return 1 on success or undef if the file or the output directory does not exist.
 
 =head1 CREDITS
 
-Many thank's to Ivan from Broobles.com (http://www.broobles.com/imapsize/) the author of the usefull
-IMAPSize program for his help and tips to develop this module.
-
-=head2 EXPORT
-
-None by default.
+Many thank's to Ivan from Broobles.com (http://www.broobles.com/imapsize/) the
+author of the usefull IMAPSize program for his help and tips to develop this
+module.
 
 =head1 AUTHOR
 
 Reinhard Pagitsch, E<lt>rpirpag@gmx.atE<gt>
+
+=head1 PERL EMAIL PROJECT
+
+This module is maintained by the Perl Email Project.  It has no real
+maintainer.  Volunteers should write to the PEP mailing list.
+
+L<http://emailproject.perl.org/wiki/Mail::Convert::Mbox::ToEml>
 
 =head1 SEE ALSO
 
