@@ -1,5 +1,8 @@
 Revision history for Perl extension Mail::Convert::Mbox::Eml.
 
+0.02  Do Aug  17 2006
+	- some corrections for the generation of the filename wich will be used for the eml file.
+
 0.01  Mon Aug 14 14:53:43 2006
 	- original version; created by h2xs 1.21 with options
 		-X -n Mail::Convert::Mbox::Eml
