@@ -25,7 +25,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 	
 );
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 # Preloaded methods go here.
@@ -123,6 +123,10 @@ sub WriteToFile
 		$subject =~ s/:/_/g;
 		$subject =~ s/'//g;
 		$subject =~ s/\?//g;
+		$subject =~ s/\<//g;
+		$subject =~ s/\>//g;
+		$subject =~ s/\|//g;
+		$subject =~ s/\*//g;
 		$subject =~ s/$x0d$//i;
 		
 	} else
@@ -156,15 +160,20 @@ sub checkLines
 	my $attach="Content-Type: application";
 	my $attach1="Content-Disposition: attachment";
 	my $EOF=chr(hex('0x1A'));
-	my $ToVal=(split(/:/,(grep /^To:/i, @mail)[0]))[1];
-	$ToVal=~ s/^\s+//;
+	my $ToVal;
+	my @TVal=grep /^To:/i, @mail;
+	if($TVal[0]) {
+		$ToVal=(split(/:/,$TVal[0]))[1];
+		$ToVal=~ s/^\s+//;
+	}
+	
 	foreach (@mail)
 	{
 		if($_=~/^from:/i)
 		{
 			$tmp=(split(/from:/i, $_))[1];	# correct the From: line, insert the mail address in To:
 			if(length($tmp) <= 2) {
-				$_ = "From: " + $ToVal;
+				$_ = "From: " . $ToVal if $ToVal;
 			}
 			if($_ =~ /^>from/i || $_ =~ /^>from:/i)	# correct the From: line
 			{
