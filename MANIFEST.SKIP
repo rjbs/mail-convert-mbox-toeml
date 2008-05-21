@@ -1,5 +1,6 @@
 MANIFEST.SKIP
 ^\.git/
+\.svn/
 .gitignore
 blib\b
 cover_db
