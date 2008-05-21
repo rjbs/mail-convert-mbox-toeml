@@ -1,0 +1,38 @@
+				Mail-Convert-Mbox-ToEml version 0.01
+				====================================
+					   August 2006
+				(c) by Reinhard Pagitsch
+			   Homepage: http://members.aon.at/rpagitsch/
+							
+The latest version can be retrieved from:
+
+http://search.cpan.org/~rpagitsch/
+
+DESCRIPTION
+
+Mail-Convert-Mbox-ToEml is a Module to convert MBox mail files from Mozilla and Co 
+to Outlook Express single .eml which can be imported to Outlook and Outlook Express.
+I could only test MBox files from Mozilla on WindowsXP and Windows 2000.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  none
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2006 Reinhard Pagitsch
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
