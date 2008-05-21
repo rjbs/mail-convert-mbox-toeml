@@ -25,7 +25,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 	
 );
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 # Preloaded methods go here.
@@ -68,6 +68,75 @@ sub CreateEML
 	
 	$self->Parse();
 	return 1;
+}
+
+sub GetMessageCount
+{
+	my $self=shift;
+	if($self->{MessageCount}) { return $self->{MessageCount}; }
+	else { return; }
+}
+sub GetMessages
+{
+	my $self=shift;
+	my $infile=shift || $self->{InFile};
+	my @subjectList=();
+	my $x0d=chr(hex('0x0d'));
+	if(open(FH, $infile))
+	{
+		my $count=0;
+		while(<FH>)
+		{
+			if($_ =~ /^subject:/i)
+			{
+				
+				my $tmp=(split(/^subject:/i, $_))[1];
+				chomp $tmp;
+				$tmp=~ s/^\s+//;
+				$tmp =~ s/$x0d$//i;
+				push(@subjectList,$tmp);
+				$count++;
+			}
+			
+		}
+		$self->{MessageCount}=$count;
+		return @subjectList;
+	} else { $self->{Error}="No messages found!\n"; return; }
+}
+
+sub SetFileAndDir
+{
+	my $self=shift;
+	$self->{InFile}=shift;
+	$self->{OutDir}=shift;
+	if(!-e $self->{InFile}) { print "file does not exist!\n"; return; }
+	if(!-d $self->{OutDir}) { print "output directory is not a directory!\n"; return; }
+	if(!-e $self->{OutDir}) { print "output directory does not exist!\n"; return; }
+	return 1;
+}
+
+sub FindMessage
+{
+	my $self=shift;
+	my $what=shift;
+	my $infile=shift||$self->{InFile};
+	my $count=0;
+	my $scount=0;
+	my %h;
+	my @subjectlist = $self->GetMessages($infile);
+	if(!@subjectlist) { return; }
+	foreach ( @subjectlist )
+	{
+		if(lc($_) =~ /$what/i)
+		{
+			$h{$scount}= { MSG=>$_, MSGNUM=>$count };
+			#$h{MSGNUM}=;
+			$scount++;
+		}
+		$count++;
+	}
+	if(%h) { return %h; }
+	else { $self->{Error}="Message(s) not found!\n"; return; }
 }
 
 sub Parse
@@ -200,8 +269,7 @@ __END__
 
 =head1 NAME
 
-Mail::Convert::Mbox::ToEml - Perl extension to convert Mbox files (from Mozilla and Co) to
-Outlook Express eml files.
+Mail::Convert::Mbox::ToEml - Perl extension to convert Mbox files (from Mozilla and Co) to Outlook Express eml files.
 
 =head1 SYNOPSIS
 
@@ -226,15 +294,54 @@ The two arguments are:
 $file is the MBox file to convert.
 $outdir is the directory where the single eml files are stored.
 
+On error the method returns undef.
+
 =item CreateEML()
 
 This function do the convertion and writes the .eml file.
 The two optional arguments are:
 $file is the MBox file to convert.
-$outdir is the directory where the single eml files are stored.
+$outdir is the directory where the single eml files have to be stored.
 
 The return value is undef if the file or the ouput directory does not exist and 1 on success.
 If there was an error to create the eml file it will be printed out and continuewith the next message.
+
+
+=item GetMessages()
+
+This method returns the subject line of all messages in the file.
+Paramter: the file to process (optional)
+Return: an Array of subjects or undef.
+
+=item FindMessage()
+
+This method return the found messages which match the keyword in the subject line given as parameter.
+Parameters: a keyword and optional a file to process
+Return: a hash of hashes whith the subject line and the message number or undef.
+
+example: 
+my %h = $MBX->FindMessage("RE: Help", ["d:/mail/Inbox"]);
+foreach (keys %h)
+{
+	print "The key: $_="; 
+		foreach my $xx (keys %{$h{$_}})  
+		{
+			print "$xx=" . %{$h{$_}}->{$xx} . " ";
+		}
+	print " \n";
+}
+
+
+=item GetMessageCount()
+
+This method returns the number of messages in the given file or undef.
+There are no parameters.
+
+=item SetFileAndDir()
+
+With this Method the input file and the output directory can be set.
+Parameters: filename, output directory
+Return 1 on success or undef if the file or the output directory does not exist.
 
 =back
 
@@ -243,11 +350,9 @@ If there was an error to create the eml file it will be printed out and continue
 Many thank's to Ivan from Broobles.com (http://www.broobles.com/imapsize/) the author of the usefull
 IMAPSize program for his help and tips to develop this module.
 
-
 =head2 EXPORT
 
 None by default.
-
 
 =head1 AUTHOR
 
