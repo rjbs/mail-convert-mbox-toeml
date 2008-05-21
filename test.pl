@@ -15,22 +15,22 @@ ok(1); # If we made it this far, we're ok.
 # Insert your test code below, the Test module is use()ed here so read
 # its man page ( perldoc Test ) for help writing this test script.
 
-my $MBX=Mail::Convert::Mbox::ToEml->new("D:/mail/PO and Portal", "D:/Download/Entwicklung/Delphi/out1");
+#my $MBX=Mail::Convert::Mbox::ToEml->new("D:/mail/PO and Portal", "D:/Download/Entwicklung/Delphi/out1");
 #my $ret=$MBX->CreateEML();
-my @liste=$MBX->GetMessages();
-my %h = $MBX->FindMessage("WebPortal");
-foreach (keys %h)
-{
-	print "The key: $_="; 
-		foreach my $xx (keys %{$h{$_}})  
-		{
-			print "$xx=" . %{$h{$_}}->{$xx} . " ";
-		}
-	print " \n";
-}
-	print " \n";
-	print " \n";
-foreach (@liste)
-{
-	print "$_\n";
-}
+#my @liste=$MBX->GetMessages();
+#my %h = $MBX->FindMessage("WebPortal");
+#foreach (keys %h)
+#{
+#	print "The key: $_="; 
+#		foreach my $xx (keys %{$h{$_}})  
+#		{
+#			print "$xx=" . %{$h{$_}}->{$xx} . " ";
+#		}
+#	print " \n";
+#}
+#	print " \n";
+#	print " \n";
+#foreach (@liste)
+#{
+#	print "$_\n";
+#}
