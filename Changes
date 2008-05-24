@@ -1,5 +1,8 @@
 Revision history for Perl extension Mail::Convert::Mbox::Eml
 
+0.06      2008-05-24
+          repackaged under maintenance of Perl Email Project
+
 0.04      Mon Oct 15 2007
           in the test.pl I commented out the access to the mailbox
 
